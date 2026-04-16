@@ -78,7 +78,7 @@ where
     pub fn with_client(client: Client<C, String>) -> Configuration<C> {
         Configuration {
             base_path: "http://localhost/api/v1".to_owned(),
-            user_agent: Some("cloud-hypervisor-client/0.3.0".to_owned()),
+            user_agent: Some("cloud-hypervisor-client/0.4.0".to_owned()),
             client,
             basic_auth: None,
             oauth_access_token: None,
