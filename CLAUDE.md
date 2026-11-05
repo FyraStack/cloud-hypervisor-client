@@ -64,18 +64,19 @@ Maintenance:
 
 ## Code generation pipeline
 
-The generator is `generator/src/main.rs`. The flow:
+The generator entry point is `generator/src/main.rs`; the pipeline is split across `generator/src/{spec,generator_jar,generate,postprocess}.rs`. The flow:
 
-1. Downloads the upstream spec from the cloud-hypervisor `master` branch and asserts its `info.version` equals
-   `cloud_hypervisor_openapi_expected_version` (currently `"0.3.0"` in code). Bumping the upstream spec means
-   updating that constant in `main.rs` and verifying the generated diff is sane. Note: the upstream spec has
-   been observed to remain pinned at `0.3.0` even after substantive changes (see commit b1c3cb0), so the
-   version assertion alone is not sufficient to detect drift. The downloaded spec is written to
-   `generator/workdir/downloads/cloud-hypervisor_<version>.yaml` and is **committed** to the repo (the
-   generator overwrites it in place on every run via `truncate(true)`); an unexpected diff there after
-   `just gen` is the signal that upstream has drifted and the regenerated `src/` should be reviewed against
-   it. The OpenAPI Generator jars in the same directory remain gitignored (they are reproducibly fetched
-   from Maven Central and SHA1-verified).
+1. Downloads the upstream spec and asserts its `info.version` equals `CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION`
+   (currently `"0.3.0"`) in `generator/src/spec.rs`. The spec is fetched from the cloud-hypervisor release tag in
+   `CLOUD_HYPERVISOR_RELEASE` (currently `"v54.0"`) rather than from `master`, so regeneration is reproducible;
+   bumping the API means bumping that tag, re-running `just gen` and reviewing the generated diff. Note: the
+   upstream spec has been observed to remain pinned at `0.3.0` even after substantive changes (see commit b1c3cb0),
+   so the version assertion alone is not sufficient to detect drift. The downloaded spec is written to
+   `generator/workdir/downloads/cloud-hypervisor_<release>.yaml` (plus `.normalized.yaml` and `.normalized.diff`)
+   and is **committed** to the repo (the generator overwrites it in place on every run via
+   `truncate(true)`); an unexpected diff there after `just gen` is the signal that the pinned tag changed and the
+   regenerated `src/` should be reviewed against it. The OpenAPI Generator jars in the same directory remain
+   gitignored (they are reproducibly fetched from Maven Central and SHA1-verified).
 2. Runs `openapi-generator-cli` (version `7.22.0`, pinned in `main.rs`) twice:
     - `author template -g rust` into `generator/workdir/templates_original/` to capture the upstream baseline
       templates.
@@ -101,7 +102,7 @@ The generator is `generator/src/main.rs`. The flow:
 - Output of generated code is wrong (type, naming, structure, derive, etc.) -> edit
   `generator/workdir/templates/` or `generator/workdir/openapi-generator.yaml`, then re-run the generator.
   Do not touch `templates_original/` (it is wiped on every run).
-- Spec or generator version bump -> edit the constants near the top of `generator/src/main.rs`.
+- Spec or generator version bump -> edit the constants near the top of `generator/src/spec.rs`.
 - After any generator change, run `just gen` and inspect the resulting diff under `src/` before committing.
   Commit the regenerated `src/` together with the template/config change in the same commit (see commit
   b1c3cb0 for the established pattern).
@@ -109,10 +110,11 @@ The generator is `generator/src/main.rs`. The flow:
 ## Versioning and release metadata
 
 The crate version in `Cargo.toml` carries upstream-spec provenance in its build metadata:
-`<semver>+api-spec-<upstream-version>-<regenerated-at-date>` (currently
-`0.5.0+api-spec-0.3.0-2026-05-11`). The same two values are mirrored as machine-readable fields under
-`[package.metadata.api-spec]` (`upstream-version`, `regenerated-at`). Keep all three in sync, and update
-the MSRV badge / version snippet in `README.md` plus the entry in `CHANGELOG.md` whenever the version
-changes. Cargo treats the `+...` build metadata as opaque, so it does not affect semver resolution; do
-not "simplify" it away.
+`<semver>+api-spec-<upstream-version>-<release-tag>` (currently `0.7.0+api-spec-0.3.0-v54.0`). The upstream
+version and release tag are mirrored as machine-readable fields under `[package.metadata.api-spec]`
+(`upstream-version`, `upstream-release`, plus the `regenerated-at` date). Keep them in sync with
+`CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION` / `CLOUD_HYPERVISOR_RELEASE` in `generator/src/spec.rs` and with
+`httpUserAgent` / `packageVersion` in `generator/workdir/openapi-generator.yaml`, and update the MSRV badge /
+version snippet in `README.md` plus the entry in `CHANGELOG.md` whenever the version changes. Cargo treats the
+`+...` build metadata as opaque, so it does not affect semver resolution; do not "simplify" it away.
 

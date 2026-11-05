@@ -20,7 +20,7 @@ pub struct ConsoleConfig {
     #[serde(rename = "mode")]
     pub mode: models::ConsoleMode,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(rename = "pci_segment", skip_serializing_if = "Option::is_none")]

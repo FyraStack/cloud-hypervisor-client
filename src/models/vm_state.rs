@@ -22,6 +22,8 @@ pub enum VmState {
     Shutdown,
     #[serde(rename = "Paused")]
     Paused,
+    #[serde(rename = "BreakPoint")]
+    BreakPoint,
 }
 
 impl std::fmt::Display for VmState {
@@ -31,6 +33,7 @@ impl std::fmt::Display for VmState {
             Self::Running => write!(f, "Running"),
             Self::Shutdown => write!(f, "Shutdown"),
             Self::Paused => write!(f, "Paused"),
+            Self::BreakPoint => write!(f, "BreakPoint"),
         }
     }
 }

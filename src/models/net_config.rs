@@ -28,7 +28,7 @@ pub struct NetConfig {
     #[serde(rename = "mtu", skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i32>,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "num_queues", skip_serializing_if = "Option::is_none")]
     pub num_queues: Option<i32>,
     #[serde(rename = "queue_size", skip_serializing_if = "Option::is_none")]

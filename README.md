@@ -15,7 +15,8 @@ The `cloud-hypervisor-client` crate can be used for managing the endpoints provi
 Rust project.
 
 The API client code of this crate has been auto-generated from
-the [OpenAPI description for the cloud-hypervisor REST API](https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/master/vmm/src/api/openapi/cloud-hypervisor.yaml)
+the [OpenAPI description for the cloud-hypervisor REST API](https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/v54.0/vmm/src/api/openapi/cloud-hypervisor.yaml)
+of [cloud-hypervisor v54.0](https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v54.0)
 using [OpenAPI Generator](https://openapi-generator.tech/).
 
 ## Installation
@@ -30,7 +31,7 @@ Or add it to your `Cargo.toml` manually:
 
 ```toml
 [dependencies]
-cloud-hypervisor-client = "0.6.0+api-spec-0.3.0-2026-05-19"
+cloud-hypervisor-client = "0.7.0+api-spec-0.3.0-v54.0"
 ```
 
 The crate targets a local cloud-hypervisor VMM over a Unix domain socket via `hyper` and `hyperlocal`, so it

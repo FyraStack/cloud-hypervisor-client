@@ -1,7 +1,7 @@
 [package]
 name = "cloud-hypervisor-client"
-version = "0.6.0+api-spec-0.3.0-2026-05-19"
-authors = ["Lukas Potthast <privat@lukas-potthast.de>"]
+version = "0.7.0+api-spec-0.3.0-v54.0"
+authors = ["Lukas Potthast <privat@lukas-potthast.de>", "Cappy Ishihara <cappy@fyrastack.com>"]
 edition = "2024"
 rust-version = "1.86.0"
 license = "MIT OR Apache-2.0"
@@ -13,7 +13,8 @@ categories = ["api-bindings", "virtualization", "web-programming::http-client"]
 
 [package.metadata.api-spec]
 upstream-version = "0.3.0"
-regenerated-at = "2026-05-19"
+upstream-release = "v54.0"
+regenerated-at = "2026-11-05"
 
 [dependencies]
 futures = "^0.3"

@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0+api-spec-0.3.0-v54.0] - 2026-11-05
+
+### cloud-hypervisor-client
+
+#### Added
+
+- New endpoints on `apis::DefaultApi`:
+    - `vm_balloon_stats_get() -> models::BalloonStatsResponse` (`GET /vm.balloon-stats`).
+    - `vm_cancel_migration_put()` (`PUT /vm.cancel-migration`).
+- New models `models::BalloonStats`, `models::BalloonStatsResponse`, `models::IommuType`,
+  `models::MigrationMode`, `models::RtcConfig` and `models::VmMemoryZoneUpdateData`.
+- **Breaking.** New optional fields on `models::VmConfig`: `user_devices: Option<Vec<models::UserDeviceConfig>>`
+  and `rtc: Option<models::RtcConfig>`.
+- **Breaking.** New optional fields on `models::DeviceConfig`: `id`, `pci_segment`, `pci_device_id`.
+- **Breaking.** `models::GenericVhostUserConfig` gained `id: Option<String>`.
+- New optional field `guest_block_size: Option<i32>` on `models::DiskConfig`.
+- New optional field `reserve: Option<bool>` on `models::MemoryConfig` and `models::MemoryZoneConfig`.
+- New optional field `zone_updates: Option<Vec<models::VmMemoryZoneUpdateData>>` on
+  `models::RestoreConfig` and `models::ReceiveMigrationData`.
+- New optional fields `tls_dir` and `background_fetch_pages` on `models::ReceiveMigrationData`.
+- New optional fields `preserve_source`, `tls_dir` and `memory_mode` on `models::SendMigrationData`.
+- New optional `system_*` / `chassis_asset_tag` fields on `models::PlatformConfig`.
+- New enum variants `models::ImageType::FlatVmdk`, `models::MemoryRestoreMode::CopyOnWrite` and
+  `models::VmState::BreakPoint`.
+
+#### Changed
+
+- **Breaking.** `models::VmConfig` field `generic-vhost-user` renamed to `generic_vhost_user`.
+- **Breaking.** `models::DeviceConfig::new()` takes no arguments; `path` is now `Option<String>` so devices can be
+  passed as an out-of-band cdev file descriptor instead.
+- **Breaking.** `models::GenericVhostUserConfig::new()` now takes `(socket, queue_sizes, device_type)`.
+- **Breaking.** `models::GenericVhostUserConfig`: `queue_size: Vec<u16>` renamed to `queue_sizes` and made required;
+  `virtio_id` renamed to `device_type`.
+
+#### Removed
+
+- **Breaking.** `apis::DefaultApi::vmm_nmi_put()` removed in favour of `vm_nmi_put()` (`PUT /vmm.nmi` -> `PUT /vm.nmi`).
+
+### generator
+
+#### Changed
+
+- The generator now pins the cloud-hypervisor release tag instead of tracking `master`:
+  `CLOUD_HYPERVISOR_RELEASE` in `generator/src/spec.rs` selects `v54.0`, and the downloaded spec, normalized spec
+  and normalization diff are named after the release tag (`cloud-hypervisor_v54.0.yaml` and friends).
+- `generator/workdir/openapi-generator.yaml` bumps `httpUserAgent` / `packageVersion` to `0.7.0`, so the generated
+  `Configuration` user agent matches the crate version.
+- Rebased onto upstream `lpotthast/cloud-hypervisor-client` `0.6.0+api-spec-0.3.0-2026-05-19` (edition 2024,
+  MSRV 1.86.0, OpenAPI Generator 7.22.0, generator split into modules, `rootcause` errors, new CI and `Justfile`).
+
 ## [0.6.0+api-spec-0.3.0-2026-05-19] - 2026-05-19
 
 ### cloud-hypervisor-client

@@ -22,12 +22,37 @@ pub struct PlatformConfig {
         skip_serializing_if = "Option::is_none"
     )]
     pub iommu_address_width_bits: Option<u8>,
+    #[serde(
+        rename = "system_serial_number",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub system_serial_number: Option<String>,
     #[serde(rename = "serial_number", skip_serializing_if = "Option::is_none")]
     pub serial_number: Option<String>,
+    #[serde(rename = "system_uuid", skip_serializing_if = "Option::is_none")]
+    pub system_uuid: Option<String>,
     #[serde(rename = "uuid", skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,
     #[serde(rename = "oem_strings", skip_serializing_if = "Option::is_none")]
     pub oem_strings: Option<Vec<String>>,
+    #[serde(
+        rename = "system_manufacturer",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub system_manufacturer: Option<String>,
+    #[serde(
+        rename = "system_product_name",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub system_product_name: Option<String>,
+    #[serde(rename = "system_version", skip_serializing_if = "Option::is_none")]
+    pub system_version: Option<String>,
+    #[serde(rename = "system_family", skip_serializing_if = "Option::is_none")]
+    pub system_family: Option<String>,
+    #[serde(rename = "system_sku_number", skip_serializing_if = "Option::is_none")]
+    pub system_sku_number: Option<String>,
+    #[serde(rename = "chassis_asset_tag", skip_serializing_if = "Option::is_none")]
+    pub chassis_asset_tag: Option<String>,
     #[serde(rename = "tdx", skip_serializing_if = "Option::is_none")]
     pub tdx: Option<bool>,
     #[serde(rename = "sev_snp", skip_serializing_if = "Option::is_none")]
@@ -44,9 +69,17 @@ impl PlatformConfig {
             num_pci_segments: None,
             iommu_segments: None,
             iommu_address_width_bits: None,
+            system_serial_number: None,
             serial_number: None,
+            system_uuid: None,
             uuid: None,
             oem_strings: None,
+            system_manufacturer: None,
+            system_product_name: None,
+            system_version: None,
+            system_family: None,
+            system_sku_number: None,
+            chassis_asset_tag: None,
             tdx: None,
             sev_snp: None,
             iommufd: None,

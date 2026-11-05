@@ -13,10 +13,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DeviceConfig {
-    #[serde(rename = "path")]
-    pub path: String,
+    /// Sysfs path of the VFIO device. Exactly one of `path` or an externally-opened cdev FD must be supplied; an FD is passed out of band via SCM_RIGHTS on the UNIX domain socket, never in this body.
+    #[serde(rename = "path", skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "pci_segment", skip_serializing_if = "Option::is_none")]
     pub pci_segment: Option<i16>,
     #[serde(rename = "pci_device_id", skip_serializing_if = "Option::is_none")]
@@ -36,9 +37,9 @@ pub struct DeviceConfig {
 }
 
 impl DeviceConfig {
-    pub fn new(path: String) -> DeviceConfig {
+    pub fn new() -> DeviceConfig {
         DeviceConfig {
-            path,
+            path: None,
             iommu: None,
             pci_segment: None,
             pci_device_id: None,

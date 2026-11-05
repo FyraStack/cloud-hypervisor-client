@@ -20,7 +20,7 @@ pub struct RngConfig {
     #[serde(rename = "pci_device_id", skip_serializing_if = "Option::is_none")]
     pub pci_device_id: Option<u8>,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "src")]
     pub src: String,
 }

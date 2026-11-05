@@ -11,9 +11,12 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-///
+/// ImageType : Unknown is only valid for vhost-user disks.
+/// Unknown is only valid for vhost-user disks.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum ImageType {
+    #[serde(rename = "FlatVmdk")]
+    FlatVmdk,
     #[serde(rename = "FixedVhd")]
     FixedVhd,
     #[serde(rename = "Qcow2")]
@@ -29,6 +32,7 @@ pub enum ImageType {
 impl std::fmt::Display for ImageType {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
+            Self::FlatVmdk => write!(f, "FlatVmdk"),
             Self::FixedVhd => write!(f, "FixedVhd"),
             Self::Qcow2 => write!(f, "Qcow2"),
             Self::Raw => write!(f, "Raw"),
@@ -40,6 +44,6 @@ impl std::fmt::Display for ImageType {
 
 impl Default for ImageType {
     fn default() -> ImageType {
-        Self::FixedVhd
+        Self::FlatVmdk
     }
 }

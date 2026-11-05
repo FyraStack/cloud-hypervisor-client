@@ -4,7 +4,7 @@
 //!
 //!The `cloud-hypervisor-client` crate can be used for managing the endpoints provided by the cloud-hypervisor REST API socket in your Rust project.
 //!
-//!The API client code of this crate has been auto-generated from the [Official OpenAPI Description for the cloud-hypervisor REST API](https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/master/vmm/src/api/openapi/cloud-hypervisor.yaml) using [OpenAPI Generator](https://openapi-generator.tech/).
+//!The API client code of this crate has been auto-generated from the [Official OpenAPI Description for the cloud-hypervisor REST API](https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/v54.0/vmm/src/api/openapi/cloud-hypervisor.yaml) of cloud-hypervisor v54.0 using [OpenAPI Generator](https://openapi-generator.tech/).
 //!
 //!# Example
 //!

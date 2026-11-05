@@ -18,7 +18,7 @@ pub struct PmemConfig {
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
     pub size: Option<i64>,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "discard_writes", skip_serializing_if = "Option::is_none")]
     pub discard_writes: Option<bool>,
     #[serde(rename = "pci_segment", skip_serializing_if = "Option::is_none")]

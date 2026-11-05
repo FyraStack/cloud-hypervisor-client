@@ -20,7 +20,7 @@ pub struct DiskConfig {
     #[serde(rename = "direct", skip_serializing_if = "Option::is_none")]
     pub direct: Option<bool>,
     #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
+    pub iommu: Option<models::IommuType>,
     #[serde(rename = "num_queues", skip_serializing_if = "Option::is_none")]
     pub num_queues: Option<i32>,
     #[serde(rename = "queue_size", skip_serializing_if = "Option::is_none")]
@@ -54,6 +54,8 @@ pub struct DiskConfig {
     pub image_type: Option<models::ImageType>,
     #[serde(rename = "lock_granularity", skip_serializing_if = "Option::is_none")]
     pub lock_granularity: Option<models::LockGranularity>,
+    #[serde(rename = "guest_block_size", skip_serializing_if = "Option::is_none")]
+    pub guest_block_size: Option<i32>,
 }
 
 impl DiskConfig {
@@ -78,6 +80,7 @@ impl DiskConfig {
             sparse: None,
             image_type: None,
             lock_granularity: None,
+            guest_block_size: None,
         }
     }
 }

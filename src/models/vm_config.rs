@@ -32,7 +32,7 @@ pub struct VmConfig {
     pub balloon: Option<models::BalloonConfig>,
     #[serde(rename = "fs", skip_serializing_if = "Option::is_none")]
     pub fs: Option<Vec<models::FsConfig>>,
-    #[serde(rename = "generic-vhost-user", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "generic_vhost_user", skip_serializing_if = "Option::is_none")]
     pub generic_vhost_user: Option<Vec<models::GenericVhostUserConfig>>,
     #[serde(rename = "pmem", skip_serializing_if = "Option::is_none")]
     pub pmem: Option<Vec<models::PmemConfig>>,
@@ -52,10 +52,10 @@ pub struct VmConfig {
     pub vsock: Option<models::VsockConfig>,
     #[serde(rename = "numa", skip_serializing_if = "Option::is_none")]
     pub numa: Option<Vec<models::NumaConfig>>,
-    #[serde(rename = "iommu", skip_serializing_if = "Option::is_none")]
-    pub iommu: Option<bool>,
     #[serde(rename = "watchdog", skip_serializing_if = "Option::is_none")]
     pub watchdog: Option<bool>,
+    #[serde(rename = "rtc", skip_serializing_if = "Option::is_none")]
+    pub rtc: Option<models::RtcConfig>,
     #[serde(rename = "pvpanic", skip_serializing_if = "Option::is_none")]
     pub pvpanic: Option<bool>,
     #[serde(rename = "pci_segments", skip_serializing_if = "Option::is_none")]
@@ -93,8 +93,8 @@ impl VmConfig {
             vdpa: None,
             vsock: None,
             numa: None,
-            iommu: None,
             watchdog: None,
+            rtc: None,
             pvpanic: None,
             pci_segments: None,
             platform: None,

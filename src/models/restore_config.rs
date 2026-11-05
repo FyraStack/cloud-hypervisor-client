@@ -24,6 +24,8 @@ pub struct RestoreConfig {
     pub memory_restore_mode: Option<models::MemoryRestoreMode>,
     #[serde(rename = "resume", skip_serializing_if = "Option::is_none")]
     pub resume: Option<bool>,
+    #[serde(rename = "zone_updates", skip_serializing_if = "Option::is_none")]
+    pub zone_updates: Option<Vec<models::VmMemoryZoneUpdateData>>,
 }
 
 impl RestoreConfig {
@@ -33,6 +35,7 @@ impl RestoreConfig {
             prefault: None,
             memory_restore_mode: None,
             resume: None,
+            zone_updates: None,
         }
     }
 }

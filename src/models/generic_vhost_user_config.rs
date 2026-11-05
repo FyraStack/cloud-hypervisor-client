@@ -15,24 +15,27 @@ use serde::{Deserialize, Serialize};
 pub struct GenericVhostUserConfig {
     #[serde(rename = "socket")]
     pub socket: String,
-    #[serde(rename = "queue_size", skip_serializing_if = "Option::is_none")]
-    pub queue_size: Option<Vec<u16>>,
+    #[serde(rename = "queue_sizes")]
+    pub queue_sizes: Vec<u16>,
     #[serde(rename = "pci_segment", skip_serializing_if = "Option::is_none")]
     pub pci_segment: Option<i16>,
     #[serde(rename = "pci_device_id", skip_serializing_if = "Option::is_none")]
     pub pci_device_id: Option<u8>,
-    #[serde(rename = "virtio_id")]
-    pub virtio_id: u32,
+    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "device_type")]
+    pub device_type: u32,
 }
 
 impl GenericVhostUserConfig {
-    pub fn new(socket: String, virtio_id: u32) -> GenericVhostUserConfig {
+    pub fn new(socket: String, queue_sizes: Vec<u16>, device_type: u32) -> GenericVhostUserConfig {
         GenericVhostUserConfig {
             socket,
-            queue_size: None,
+            queue_sizes,
             pci_segment: None,
             pci_device_id: None,
-            virtio_id,
+            id: None,
+            device_type,
         }
     }
 }

@@ -8,6 +8,9 @@ use tokio::fs::OpenOptions;
 use tokio::io::AsyncWriteExt;
 use yaml_rust2::YamlLoader;
 
+/// cloud-hypervisor release tag the upstream OpenAPI spec is taken from.
+const CLOUD_HYPERVISOR_RELEASE: &str = "v54.0";
+
 /// Expected `info.version` of the upstream cloud-hypervisor OpenAPI spec. The generator asserts the
 /// downloaded spec matches this and refuses to proceed otherwise. Bump this when consuming a new
 /// upstream spec version. Note: the upstream spec has been observed to remain pinned at the same
@@ -15,22 +18,27 @@ use yaml_rust2::YamlLoader;
 const CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION: &str = "0.3.0";
 
 /// URL of the upstream cloud-hypervisor OpenAPI spec.
-const CLOUD_HYPERVISOR_OPENAPI_URL: &str = "https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/master/vmm/src/api/openapi/cloud-hypervisor.yaml";
+fn cloud_hypervisor_openapi_url() -> String {
+    format!(
+        "https://raw.githubusercontent.com/cloud-hypervisor/cloud-hypervisor/{CLOUD_HYPERVISOR_RELEASE}/vmm/src/api/openapi/cloud-hypervisor.yaml"
+    )
+}
 
 pub async fn download(dirs: &Dirs) -> Result<PathBuf, Report> {
     let spec_path = dirs.downloads().join(format!(
-        "cloud-hypervisor_{CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION}.yaml"
+        "cloud-hypervisor_{CLOUD_HYPERVISOR_RELEASE}.yaml"
     ));
     let normalized_path = dirs.downloads().join(format!(
-        "cloud-hypervisor_{CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION}.normalized.yaml"
+        "cloud-hypervisor_{CLOUD_HYPERVISOR_RELEASE}.normalized.yaml"
     ));
+    let spec_url = cloud_hypervisor_openapi_url();
 
     tracing::info!(
-        "Downloading version {CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION} of the OpenAPI spec for the cloud-hypervisor REST API..."
+        "Downloading version {CLOUD_HYPERVISOR_OPENAPI_EXPECTED_VERSION} of the OpenAPI spec for cloud-hypervisor {CLOUD_HYPERVISOR_RELEASE}..."
     );
-    let spec = reqwest::get(CLOUD_HYPERVISOR_OPENAPI_URL)
+    let spec = reqwest::get(&spec_url)
         .await
-        .context_with(|| format!("Failed to download: {CLOUD_HYPERVISOR_OPENAPI_URL}"))?
+        .context_with(|| format!("Failed to download: {spec_url}"))?
         .text()
         .await
         .context("Failed to extract test from response")?;

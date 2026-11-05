@@ -87,6 +87,10 @@ pub trait DefaultApi: Send + Sync {
         &self,
         vsock_config: models::VsockConfig,
     ) -> Pin<Box<dyn Future<Output = Result<models::PciDeviceInfo, Error>> + Send>>;
+    fn vm_balloon_stats_get(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<models::BalloonStatsResponse, Error>> + Send>>;
+    fn vm_cancel_migration_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>;
     fn vm_coredump_put(
         &self,
         vm_coredump_data: models::VmCoredumpData,
@@ -104,6 +108,7 @@ pub trait DefaultApi: Send + Sync {
         >,
     >;
     fn vm_info_get(&self) -> Pin<Box<dyn Future<Output = Result<models::VmInfo, Error>> + Send>>;
+    fn vm_nmi_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>;
     fn vm_receive_migration_put(
         &self,
         receive_migration_data: models::ReceiveMigrationData,
@@ -136,7 +141,6 @@ pub trait DefaultApi: Send + Sync {
         &self,
         vm_snapshot_config: models::VmSnapshotConfig,
     ) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>;
-    fn vmm_nmi_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>>;
     fn vmm_ping_get(
         &self,
     ) -> Pin<Box<dyn Future<Output = Result<models::VmmPingResponse, Error>> + Send>>;
@@ -340,6 +344,27 @@ where
     }
 
     #[allow(unused_mut)]
+    fn vm_balloon_stats_get(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<models::BalloonStatsResponse, Error>> + Send>> {
+        let mut req =
+            __internal_request::Request::new(hyper::Method::GET, "/vm.balloon-stats".to_string());
+
+        req.execute(self.configuration.borrow())
+    }
+
+    #[allow(unused_mut)]
+    fn vm_cancel_migration_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>> {
+        let mut req = __internal_request::Request::new(
+            hyper::Method::PUT,
+            "/vm.cancel-migration".to_string(),
+        );
+        req = req.returns_nothing();
+
+        req.execute(self.configuration.borrow())
+    }
+
+    #[allow(unused_mut)]
     fn vm_coredump_put(
         &self,
         vm_coredump_data: models::VmCoredumpData,
@@ -374,6 +399,14 @@ where
     #[allow(unused_mut)]
     fn vm_info_get(&self) -> Pin<Box<dyn Future<Output = Result<models::VmInfo, Error>> + Send>> {
         let mut req = __internal_request::Request::new(hyper::Method::GET, "/vm.info".to_string());
+
+        req.execute(self.configuration.borrow())
+    }
+
+    #[allow(unused_mut)]
+    fn vm_nmi_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>> {
+        let mut req = __internal_request::Request::new(hyper::Method::PUT, "/vm.nmi".to_string());
+        req = req.returns_nothing();
 
         req.execute(self.configuration.borrow())
     }
@@ -479,14 +512,6 @@ where
         let mut req =
             __internal_request::Request::new(hyper::Method::PUT, "/vm.snapshot".to_string());
         req = req.with_body_param(vm_snapshot_config);
-        req = req.returns_nothing();
-
-        req.execute(self.configuration.borrow())
-    }
-
-    #[allow(unused_mut)]
-    fn vmm_nmi_put(&self) -> Pin<Box<dyn Future<Output = Result<(), Error>> + Send>> {
-        let mut req = __internal_request::Request::new(hyper::Method::PUT, "/vmm.nmi".to_string());
         req = req.returns_nothing();
 
         req.execute(self.configuration.borrow())
